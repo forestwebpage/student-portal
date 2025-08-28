@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .rating-stars {
+            direction: rtl;
+        }
+        .rating-stars input[type=radio] {
+            display: none;
+        }
+        .rating-stars label {
+            color: #ddd;
+            font-size: 24px;
+            padding: 0 2px;
+            cursor: pointer;
+        }
+        .rating-stars input[type=radio]:checked ~ label {
+            color: #ffc107;
+        }
+        .rating-stars label:hover,
+        .rating-stars label:hover ~ label {
+            color: #ffc107;
+        }
+        .active-tab {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-blue-600 text-white p-4 flex justify-between items-center">
+        <h1 class="text-2xl font-bold">Student Portal</h1>
+        <div id="navButtons">
+            <button id="registerBtn" class="bg-white text-blue-600 px-4 py-2 rounded mr-2">Register</button>
+            <button id="loginBtn" class="bg-white text-blue-600 px-4 py-2 rounded">Login</button>
+        </div>
+        <div id="userMenu" class="hidden">
+            <span id="userName" class="mr-4"></span>
+            <button id="logoutBtn" class="bg-white text-blue-600 px-4 py-2 rounded">Logout</button>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-4 mt-8">
+        <!-- Registration Form -->
+        <div id="registerTab" class="tab-content bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto">
+            <h2 class="text-2xl font-bold mb-6 text-center">Student Registration</h2>
+            <form id="registrationForm" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-700">First Name</label>
+                        <input type="text" id="firstName" required class="w-full px-4 py-2 border rounded-md">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700">Last Name</label>
+                        <input type="text" id="lastName" required class="w-full px-4 py-2 border rounded-md">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700">Father's Name</label>
+                    <input type="text" id="fatherName" required class="w-full px-4 py-2 border rounded-md">
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-700">Class</label>
+                        <input type="text" id="studentClass" required class="w-full px-4 py-2 border rounded-md">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700">Roll No</label>
+                        <input type="number" id="rollNo" required class="w-full px-4 py-2 border rounded-md">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700">Home Address</label>
+                    <textarea id="address" required class="w-full px-4 py-2 border rounded-md"></textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700">Mobile No</label>
+                    <input type="tel" id="mobileNo" required class="w-full px-4 py-2 border rounded-md">
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700">Upload Photo (URL)</label>
+                    <input type="url" id="photoUrl" class="w-full px-4 py-2 border rounded-md" placeholder="Paste image URL">
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700">Hobbies</label>
+                    <input type="text" id="hobbies" class="w-full px-4 py-2 border rounded-md" placeholder="Reading, Sports, Music, etc.">
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700">About You (short bio)</label>
+                    <textarea id="about" class="w-full px-4 py-2 border rounded-md"></textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700">Password</label>
+                    <input type="password" id="password" required class="w-full px-4 py-2 border rounded-md">
+                    <p class="text-sm text-gray-600 mt-1">Must be at least 8 characters with 1 capital letter, 1 number, and 1 special character (@,#,$, etc.)</p>
+                </div>
+                
+                <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">Register</button>
+            </form>
+        </div>
+
+        <!-- Login Form -->
+        <div id="loginTab" class="tab-content bg-white p-6 rounded-lg shadow-md max-w-md mx-auto">
+            <h2 class="text-2xl font-bold mb-6 text-center">Student Login</h2>
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700">Login with UserID or Mobile No</label>
+                    <input type="text" id="loginId" required class="w-full px-4 py-2 border rounded-md">
+                </div>
+                
+                <div>
+                    <label class="block text-gray-700">Password</label>
+                    <input type="password" id="loginPassword" required class="w-full px-4 py-2 border rounded-md">
+                </div>
+                
+                <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">Login</button>
+            </form>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboardTab" class="tab-content">
+            <div class="bg-white p-6 rounded-lg shadow-md max-w-4xl mx-auto mb-6">
+                <h2 class="text-2xl font-bold mb-6 text-center">Student Dashboard</h2>
+                
+                <div class="flex flex-col md:flex-row items-center mb-6">
+                    <img id="dashboardPhoto" src="" alt="Student Photo" class="w-32 h-32 rounded-full object-cover mb-4 md:mb-0 md:mr-6">
+                    <div>
+                        <h3 id="dashboardName" class="text-xl font-bold"></h3>
+                        <p id="dashboardFatherName" class="text-gray-600"></p>
+                        <p id="dashboardClassRoll" class="text-gray-600"></p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h4 class="font-bold mb-2">Contact Information</h4>
+                        <p id="dashboardAddress" class="text-gray-700"></p>
+                        <p id="dashboardMobile" class="text-gray-700 mt-2"></p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-bold mb-2">About</h4>
+                        <p id="dashboardHobbies" class="text-gray-700"></p>
+                        <p id="dashboardAbout" class="text-gray-700 mt-2"></p>
+                    </div>
+                </div>
+                
+                <div class="border-t pt-4">
+                    <h4 class="font-bold mb-2 text-center">Your Rating</h4>
+                    <div class="flex justify-center items-center">
+                        <div class="text-3xl text-amber-500 mr-4">
+                            <span id="dashboardRating">0</span>/5
+                        </div>
+                        <div class="text-amber-500 text-2xl">
+                            <span id="dashboardStars"></span>
+                        </div>
+                        <div class="ml-4 text-gray-600">
+                            (<span id="dashboardTotalRatings">0</span> reviews)
+                        </div>
+                    </div>
+                    <div id="dashboardComments" class="mt-4 text-gray-700"></div>
+                </div>
+            </div>
+            
+            <!-- Search Section -->
+            <div class="bg-white p-6 rounded-lg shadow-md max-w-4xl mx-auto">
+                <h2 class="text-2xl font-bold mb-4">Search Students</h2>
+                <div class="flex mb-6">
+                    <input type="text" id="searchInput" placeholder="Search by UserID or Mobile No" class="flex-grow px-4 py-2 border rounded-l-md">
+                    <button id="searchBtn" class="bg-blue-600 text-white px-4 py-2 rounded-r-md">Search</button>
+                </div>
+                
+                <div id="searchResults" class="space-y-4"></div>
+            </div>
+        </div>
+
+        <!-- Rating Modal -->
+        <div id="ratingModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
+            <div class="bg-white p-6 rounded-lg shadow-md max-w-md w-full">
+                <h2 class="text-2xl font-bold mb-4">Rate Student</h2>
+                <div id="rateStudentInfo" class="flex items-center mb-4">
+                    <img id="rateStudentPhoto" src="" alt="Student Photo" class="w-16 h-16 rounded-full object-cover mr-4">
+                    <h3 id="rateStudentName" class="text-xl font-bold"></h3>
+                </div>
+                
+                <form id="ratingForm">
+                    <input type="hidden" id="ratedStudentId">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">Rating</label>
+                        <div class="rating-stars">
+                            <input type="radio" id="star5" name="rating" value="5">
+                            <label for="star5">★</label>
+                            <input type="radio" id="star4" name="rating" value="4">
+                            <label for="star4">★</label>
+                            <input type="radio" id="star3" name="rating" value="3">
+                            <label for="star3">★</label>
+                            <input type="radio" id="star2" name="rating" value="2">
+                            <label for="star2">★</label>
+                            <input type="radio" id="star1" name="rating" value="1" checked>
+                            <label for="star1">★</label>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="comment" class="block text-gray-700 mb-2">Comment</label>
+                        <textarea id="comment" class="w-full px-4 py-2 border rounded-md" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="flex justify-end">
+                        <button type="button" id="cancelRating" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-md mr-2">Cancel</button>
+                        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md">Submit Rating</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Configuration - Replace with your Apps Script Web App URL
+        const APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWIeqjNOjoCGbJWteNSqyzk8gO4aDWB3qWcs0Z4BR-DzdE-_XXTS-ODTX09m_2EDG47w/exec';
+
+        // DOM Elements
+        const navButtons = document.getElementById('navButtons');
+        const userMenu = document.getElementById('userMenu');
+        const userName = document.getElementById('userName');
+        
+        // Tabs
+        const registerTab = document.getElementById('registerTab');
+        const loginTab = document.getElementById('loginTab');
+        const dashboardTab = document.getElementById('dashboardTab');
+        
+        // Forms
+        const registrationForm = document.getElementById('registrationForm');
+        const loginForm = document.getElementById('loginForm');
+        const ratingForm = document.getElementById('ratingForm');
+        
+        // Buttons
+        const registerBtn = document.getElementById('registerBtn');
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const searchBtn = document.getElementById('searchBtn');
+        const cancelRating = document.getElementById('cancelRating');
+        
+        // Modals
+        const ratingModal = document.getElementById('ratingModal');
+        
+        // State
+        let currentUser = null;
+        
+        // Event Listeners
+        registerBtn.addEventListener('click', () => showTab('registerTab'));
+        loginBtn.addEventListener('click', () => showTab('loginTab'));
+        logoutBtn.addEventListener('click', handleLogout);
+        searchBtn.addEventListener('click', handleSearch);
+        cancelRating.addEventListener('click', () => ratingModal.classList.add('hidden'));
+        
+        registrationForm.addEventListener('submit', handleRegistration);
+        loginForm.addEventListener('submit', handleLogin);
+        ratingForm.addEventListener('submit', handleRating);
+        
+        // Initialize
+        checkAuthStatus();
+        
+        // Functions
+        function showTab(tabId) {
+            // Hide all tabs
+            registerTab.classList.remove('active');
+            loginTab.classList.remove('active');
+            dashboardTab.classList.remove('active');
+            
+            // Show selected tab
+            document.getElementById(tabId).classList.add('active');
+        }
+        
+        function checkAuthStatus() {
+            const userData = localStorage.getItem('currentUser');
+            if (userData) {
+                currentUser = JSON.parse(userData);
+                showDashboard();
+            } else {
+                showTab('loginTab');
+            }
+        }
+        
+        async function handleRegistration(e) {
+            e.preventDefault();
+            
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const fatherName = document.getElementById('fatherName').value;
+            const studentClass = document.getElementById('studentClass').value;
+            const rollNo = document.getElementById('rollNo').value;
+            const address = document.getElementById('address').value;
+            const mobileNo = document.getElementById('mobileNo').value;
+            const photoUrl = document.getElementById('photoUrl').value;
+            const hobbies = document.getElementById('hobbies').value;
+            const about = document.getElementById('about').value;
+            const password = document.getElementById('password').value;
+            
+            // Validate password
+            if (!validatePassword(password)) {
+                alert('Password must be at least 8 characters with 1 capital letter, 1 number, and 1 special character');
+                return;
+            }
+            
+            const userData = {
+                firstName,
+                lastName,
+                fatherName,
+                class: studentClass,
+                rollNo,
+                address,
+                mobileNo,
+                photoUrl: photoUrl || 'https://via.placeholder.com/150',
+                hobbies,
+                about,
+                password,
+                userId: `@${firstName}`
+            };
+            
+            try {
+                const response = await fetch(APP_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'register',
+                        data: userData
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Registration successful! Please login with your UserID or Mobile No.');
+                    registrationForm.reset();
+                    showTab('loginTab');
+                } else {
+                    alert('Registration failed: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred during registration.');
+            }
+        }
+        
+        function validatePassword(password) {
+            const minLength = 8;
+            const hasCapital = /[A-Z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            const hasSpecial = /[@#$!%*?&]/.test(password);
+            
+            return password.length >= minLength && hasCapital && hasNumber && hasSpecial;
+        }
+        
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            const loginId = document.getElementById('loginId').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            try {
+                const response = await fetch(APP_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'login',
+                        loginId,
+                        password
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    currentUser = result.data;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    showDashboard();
+                } else {
+                    alert('Login failed: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred during login.');
+            }
+        }
+        
+        function showDashboard() {
+            showTab('dashboardTab');
+            navButtons.classList.add('hidden');
+            userMenu.classList.remove('hidden');
+            userName.textContent = currentUser.firstName + ' ' + currentUser.lastName;
+            
+            // Populate dashboard with user data
+            document.getElementById('dashboardPhoto').src = currentUser.photoUrl;
+            document.getElementById('dashboardName').textContent = `${currentUser.firstName} ${currentUser.lastName}`;
+            document.getElementById('dashboardFatherName').textContent = `Father: ${currentUser.fatherName}`;
+            document.getElementById('dashboardClassRoll').textContent = `Class: ${currentUser.class}, Roll No: ${currentUser.rollNo}`;
+            document.getElementById('dashboardAddress').textContent = currentUser.address;
+            document.getElementById('dashboardMobile').textContent = `Mobile: ${currentUser.mobileNo}`;
+            document.getElementById('dashboardHobbies').textContent = `Hobbies: ${currentUser.hobbies}`;
+            document.getElementById('dashboardAbout').textContent = currentUser.about;
+            
+            // Load ratings
+            loadRatings(currentUser.userId);
+        }
+        
+        async function loadRatings(userId) {
+            try {
+                const response = await fetch(APP_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'getRatings',
+                        userId
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    const ratings = result.data;
+                    const totalRatings = ratings.length;
+                    const averageRating = totalRatings > 0 ? 
+                        (ratings.reduce((sum, rating) => sum + parseInt(rating.rating), 0) / totalRatings).toFixed(1) : 0;
+                    
+                    document.getElementById('dashboardRating').textContent = averageRating;
+                    document.getElementById('dashboardTotalRatings').textContent = totalRatings;
+                    
+                    // Display star rating
+                    const starsElement = document.getElementById('dashboardStars');
+                    starsElement.innerHTML = '';
+                    for (let i = 0; i < 5; i++) {
+                        const star = document.createElement('span');
+                        star.textContent = i < Math.round(averageRating) ? '★' : '☆';
+                        starsElement.appendChild(star);
+                    }
+                    
+                    // Display latest comments
+                    const commentsContainer = document.getElementById('dashboardComments');
+                    commentsContainer.innerHTML = '';
+                    
+                    if (totalRatings > 0) {
+                        const latestComments = ratings.slice(-3).reverse();
+                        latestComments.forEach(rating => {
+                            const commentDiv = document.createElement('div');
+                            commentDiv.className = 'border-b py-2';
+                            commentDiv.innerHTML = `
+                                <div class="text-amber-500">${'★'.repeat(rating.rating)}${'☆'.repeat(5 - rating.rating)}</div>
+                                <p>${rating.comment || 'No comment'}</p>
+                            `;
+                            commentsContainer.appendChild(commentDiv);
+                        });
+                    } else {
+                        commentsContainer.innerHTML = '<p>No ratings yet.</p>';
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading ratings:', error);
+            }
+        }
+        
+        function handleLogout() {
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            navButtons.classList.remove('hidden');
+            userMenu.classList.add('hidden');
+            showTab('loginTab');
+        }
+        
+        async function handleSearch() {
+            const searchTerm = document.getElementById('searchInput').value.trim();
+            if (!searchTerm) return;
+            
+            try {
+                const response = await fetch(APP_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'searchStudents',
+                        searchTerm,
+                        excludeUserId: currentUser.userId
+                    })
+                });
+                
+                const result = await response.json();
+                const resultsContainer = document.getElementById('searchResults');
+                resultsContainer.innerHTML = '';
+                
+                if (result.success && result.data.length > 0) {
+                    result.data.forEach(student => {
+                        const studentCard = document.createElement('div');
+                        studentCard.className = 'bg-gray-50 p-4 rounded-lg flex items-center';
+                        studentCard.innerHTML = `
+                            <img src="${student.photoUrl}" alt="${student.firstName}" class="w-16 h-16 rounded-full object-cover mr-4">
+                            <div class="flex-grow">
+                                <h3 class="font-bold">${student.firstName} ${student.lastName}</h3>
+                                <p class="text-gray-600">${student.hobbies}</p>
+                            </div>
+                            <button class="view-profile bg-blue-600 text-white px-3 py-1 rounded-md" data-userid="${student.userId}">View Profile</button>
+                        `;
+                        resultsContainer.appendChild(studentCard);
+                    });
+                    
+                    // Add event listeners to view profile buttons
+                    document.querySelectorAll('.view-profile').forEach(button => {
+                        button.addEventListener('click', (e) => {
+                            const userId = e.target.getAttribute('data-userid');
+                            viewStudentProfile(userId);
+                        });
+                    });
+                } else {
+                    resultsContainer.innerHTML = '<p class="text-center text-gray-600">No students found.</p>';
+                }
+            } catch (error) {
+                console.error('Error searching students:', error);
+            }
+        }
+        
+        async function viewStudentProfile(userId) {
+            try {
+                const response = await fetch(APP_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'getStudentProfile',
+                        userId
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    const student = result.data;
+                    
+                    // Show limited info in the rating modal
+                    document.getElementById('rateStudentPhoto').src = student.photoUrl;
+                    document.getElementById('rateStudentName').textContent = `${student.firstName} ${student.lastName}`;
+                    document.getElementById('ratedStudentId').value = student.userId;
+                    
+                    // Show the rating modal
+                    ratingModal.classList.remove('hidden');
+                } else {
+                    alert('Error loading student profile: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error viewing student profile:', error);
+            }
+        }
+        
+        async function handleRating(e) {
+            e.preventDefault();
+            
+            const rating = document.querySelector('input[name="rating"]:checked').value;
+            const comment = document.getElementById('comment').value;
+            const ratedStudentId = document.getElementById('ratedStudentId').value;
+            
+            try {
+                const response = await fetch(APP_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'submitRating',
+                        raterUserId: currentUser.userId,
+                        ratedUserId: ratedStudentId,
+                        rating,
+                        comment
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Rating submitted successfully!');
+                    ratingModal.classList.add('hidden');
+                    ratingForm.reset();
+                } else {
+                    alert('Error submitting rating: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error submitting rating:', error);
+                alert('An error occurred while submitting your rating.');
+            }
+        }
+    </script>
+</body>
+</html>
